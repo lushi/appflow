@@ -4,11 +4,13 @@ class UserForm {
   }
 
   saveData(form_id, data) {
-
+    this.data = data;
   }
 
   getFormData(form_id) {
-    const data = {}
+    const data = {
+      id: form_id,
+    }
 
     return data;
   }

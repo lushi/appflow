@@ -4,3 +4,10 @@
   <input type="hidden" name="id" value="{{ id }}"></input>
   <input type="submit" value="Send"></input>
 </form>
+
+<div>Completed:</div>
+<ul>
+{{#each completed}}
+  <li>{{this.step}}</li>
+{{/each}}
+</ul>

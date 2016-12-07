@@ -6,11 +6,22 @@ const Application = (() => {
   /* IDs of forms in application, in order */
   const FORM_IDS = ['form0', 'form1', 'form2', 'form3', 'form4'];
 
-  const _getNextForm = (userForm) => {
+  const _getNextForm = (completedForms, step) => {
     let id;
+
+    if (typeof step !== 'undefined') {
+      id = FORM_IDS[step];
+      if (completedForms.indexOf(id) > -1) {
+        return {
+          id,
+          index: step
+        }
+      }
+    }
+
     for (let i = 0, l = FORM_IDS.length; i<l; i++) {
       id = FORM_IDS[i];
-      if (!userForm.hasCompletedForm(id)) {
+      if (completedForms.indexOf(id) < 0) {
         return {
           id,
           index: i
@@ -32,11 +43,11 @@ const Application = (() => {
     return completed;
   }
 
-  const _render = (userForm, res) => {
-    const nextForm = _getNextForm(userForm);
+  const _render = (userForm, res, step) => {
+    const completedForms = userForm.getCompletedFormIds();
+    const nextForm = _getNextForm(completedForms, step);
     const data = userForm.getFormData(nextForm.id);
-    const doneForms = userForm.getCompletedFormIds();
-    const completedSteps = _mapFormsToSteps(doneForms);
+    const completedSteps = _mapFormsToSteps(completedForms);
 
     res.render('application/Index', Object.assign({}, data, {
       step: nextForm.index + 1,
@@ -48,8 +59,8 @@ const Application = (() => {
     getHandler: (req, res, next) => {
       const userId = 'user1'; // HACK: should get dynamically from session data
       const userForm = new UserForm(Db, userId);
-
-      _render(userForm, res);
+      const step = parseInt(req.params.step) - 1;
+      _render(userForm, res, step);
     },
 
     postHandler: (req, res, next) => {

@@ -1,0 +1,13 @@
+<h1>Step {{ step }}</h1>
+<form action="/" method="POST">
+  <input type="text" name="content"></input>
+  <input type="hidden" name="id" value="{{ id }}"></input>
+  <input type="submit" value="Send"></input>
+</form>
+
+<div>Completed:</div>
+<ul>
+{{#each completed}}
+  <li><a href="/{{this.step}}">{{this.step}}</a></li>
+{{/each}}
+</ul>

@@ -13,6 +13,9 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+/* HACK: prefill the Db with some form data */
+require('./db/formData.js');
+
 require('./router')(app);
 
 const listener = app.listen(3000, function() {
